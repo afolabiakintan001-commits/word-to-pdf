@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WordPDF - Converter</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+
+  <!-- PDF library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <!-- DOCX reader library -->
+  <script src="https://cdn.jsdelivr.net/npm/mammoth/mammoth.browser.min.js"></script>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="logo">WordPDF</div>
+    <div class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="index.html">Converter</a>
+      <a href="#features">Features</a>
+    </div>
+  </nav>
+
+  <!-- Converter Section -->
+  <div class="container">
+    <h1>Word → PDF Converter</h1>
+    <input type="file" id="wordFile" accept=".docx">
+    <button id="convertBtn">Convert to PDF</button>
+    <div id="spinner"></div>
+    <div id="result"></div>
+  </div>
+
+  <!-- Converter JS -->
+  <script src="script.js"></script>
+
+</body>
+</html>
