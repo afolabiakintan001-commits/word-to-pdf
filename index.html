@@ -1,48 +1,40 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Main Index</title>
+  <title>WordPDF - Converter</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+
+  <!-- PDF library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <!-- DOCX reader library -->
+  <script src="https://cdn.jsdelivr.net/npm/mammoth/mammoth.browser.min.js"></script>
 </head>
 <body>
-  <div class="navbar">
-    <div class="logo">MySite</div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="logo">WordPDF</div>
     <div class="nav-links">
       <a href="home.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="services.html">Services</a>
-      <a href="contact.html">Contact</a>
+      <a href="index.html">Converter</a>
+      <a href="home.html#features">Features</a>
     </div>
+  </nav>
+
+  <!-- Converter Section -->
+  <div class="container">
+    <h1>Word → PDF Converter</h1>
+    <input type="file" id="wordFile" accept=".docx">
+    <button id="convertBtn">Convert to PDF</button>
+    <div id="spinner"></div>
+    <div id="result"></div>
   </div>
 
-  <section class="hero">
-    <h1>Welcome to My Website</h1>
-    <p>Clean, modern, and responsive.</p>
-    <a href="about.html" class="cta-button">Get Started</a>
-  </section>
-
-  <section class="features">
-    <div class="feature">
-      <h2>Fast</h2>
-      <p>Lightning quick performance for your site.</p>
-    </div>
-    <div class="feature">
-      <h2>Secure</h2>
-      <p>Top-notch security to keep your data safe.</p>
-    </div>
-    <div class="feature">
-      <h2>Responsive</h2>
-      <p>Looks great on any device.</p>
-    </div>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 MySite. All rights reserved.</p>
-  </footer>
-
+  <!-- Script -->
   <script src="script.js"></script>
+
 </body>
 </html>
