@@ -1,152 +1,233 @@
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word to PDF Converter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <style>
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f9fafc;
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: #f9fafc;
-  color: #333;
-  line-height: 1.6;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 40px;
+      background: #fff;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar .logo {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #4a63e7;
+      letter-spacing: -0.5px;
+    }
+    .navbar .nav-links a {
+      margin-left: 28px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s, transform 0.2s;
+    }
+    .navbar .nav-links a:hover {
+      color: #4a63e7;
+      transform: translateY(-2px);
+    }
 
-/* Navbar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 40px;
-  background: #fff;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+    /* Converter Section */
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 80px 20px;
+      text-align: center;
+    }
+    .container h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #4a63e7;
+      margin-bottom: 25px;
+    }
+    input[type="file"] {
+      padding: 12px;
+      border: 2px dashed #4a63e7;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #f4f7ff;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    input[type="file"]:hover {
+      border-color: #764ba2;
+      background: #eef1ff;
+    }
+    button {
+      padding: 14px 32px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, #4a63e7, #764ba2);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
+    }
 
-.navbar .logo {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #4a63e7;
-  letter-spacing: -0.5px;
-}
+    /* Spinner */
+    #spinner {
+      margin-top: 20px;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #4a63e7;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
 
-.navbar .nav-links a {
-  margin-left: 28px;
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s, transform 0.2s;
-}
+    /* Result */
+    #result {
+      margin-top: 25px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #333;
+    }
+    #result a {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 10px 20px;
+      background: #4a63e7;
+      color: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    #result a:hover {
+      background: #764ba2;
+    }
 
-.navbar .nav-links a:hover {
-  color: #4a63e7;
-  transform: translateY(-2px);
-}
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container h1 { font-size: 2rem; }
+      input[type="file"] { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
 
-/* Converter Section */
-.container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 80px 20px;
-  text-align: center;
-}
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">Doc2PDF</div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Features</a>
+      <a href="#">About</a>
+    </div>
+  </div>
 
-.container h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #4a63e7;
-  margin-bottom: 25px;
-}
+  <!-- Converter Section -->
+  <div class="container">
+    <h1>Word to PDF Converter</h1>
+    <input type="file" id="wordFile" accept=".doc,.docx" />
+    <button id="convertBtn">Convert to PDF</button>
+    <div id="spinner"></div>
+    <div id="result"></div>
+  </div>
 
-input[type="file"] {
-  padding: 12px;
-  border: 2px dashed #4a63e7;
-  border-radius: 10px;
-  cursor: pointer;
-  background: #f4f7ff;
-  margin-bottom: 20px;
-  width: 100%;
-  max-width: 380px;
-  text-align: center;
-  transition: border-color 0.3s, background 0.3s;
-}
+  <script>
+    document.getElementById("convertBtn").addEventListener("click", async () => {
+      const fileInput = document.getElementById("wordFile");
+      const file = fileInput.files[0];
+      const spinner = document.getElementById("spinner");
+      const resultDiv = document.getElementById("result");
 
-input[type="file"]:hover {
-  border-color: #764ba2;
-  background: #eef1ff;
-}
+      resultDiv.innerHTML = "";
+      if (!file) {
+          alert("Please select a Word file first.");
+          return;
+      }
 
-button {
-  padding: 14px 32px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #fff;
-  background: linear-gradient(135deg, #4a63e7, #764ba2);
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.3s;
-}
+      spinner.style.display = "block";
+      const startTime = Date.now();
 
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
-}
+      try {
+          const arrayBuffer = await file.arrayBuffer();
+          const result = await mammoth.extractRawText({ arrayBuffer });
+          const text = result.value;
 
-/* Spinner */
-#spinner {
-  margin-top: 20px;
-  width: 40px;
-  height: 40px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4a63e7;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  display: none;
-}
+          const { PDFDocument, rgb } = PDFLib;
+          const pdfDoc = await PDFDocument.create();
+          const page = pdfDoc.addPage();
+          const { width, height } = page.getSize();
+          const fontSize = 12;
 
-@keyframes spin {
-  0% { transform: rotate(0deg);}
-  100% { transform: rotate(360deg);}
-}
+          page.drawText(text, {
+              x: 50,
+              y: height - 50,
+              size: fontSize,
+              color: rgb(0, 0, 0),
+              maxWidth: width - 100
+          });
 
-/* Result */
-#result {
-  margin-top: 25px;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333;
-}
+          const pdfBytes = await pdfDoc.save();
 
-#result a {
-  display: inline-block;
-  margin-top: 12px;
-  padding: 10px 20px;
-  background: #4a63e7;
-  color: #fff;
-  border-radius: 10px;
-  text-decoration: none;
-  transition: background 0.3s;
-}
+          // Ensure spinner is visible at least 5s
+          const elapsed = Date.now() - startTime;
+          const MIN_TIME = 5000;
+          if (elapsed < MIN_TIME) {
+              await new Promise(resolve => setTimeout(resolve, MIN_TIME - elapsed));
+          }
 
-#result a:hover {
-  background: #764ba2;
-}
+          const originalName = file.name.replace(/\.[^/.]+$/, "");
+          const blob = new Blob([pdfBytes], { type: "application/pdf" });
+          const url = URL.createObjectURL(blob);
 
-/* Responsive */
-@media (max-width: 768px) {
-  .container h1 {
-    font-size: 2rem;
-  }
-  input[type="file"] {
-    max-width: 100%;
-  }
-}
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `${originalName}.pdf`;
+          link.textContent = "Download PDF";
+
+          resultDiv.innerHTML = "";
+          resultDiv.appendChild(link);
+
+      } catch (err) {
+          resultDiv.innerHTML = `<p style="color:red; font-weight:600;">Error converting file. Please reload and try again.</p>`;
+      } finally {
+          spinner.style.display = "none";
+      }
+
+      // Safety timeout
+      setTimeout(() => { spinner.style.display = "none"; }, 15000);
+    });
+  </script>
+</body>
+</html>
