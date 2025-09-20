@@ -33,10 +33,14 @@ body {
 }
 
 .navbar .logo {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #4a63e7;
-  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar .logo img {
+  height: 40px;
+  width: auto;
+  display: block;
 }
 
 .navbar .nav-links a {
